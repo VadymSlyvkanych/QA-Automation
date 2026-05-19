@@ -10,6 +10,13 @@ from selenium.webdriver.common.action_chains import ActionChains
 def driver():
     driver = webdriver.Chrome()
     driver.maximize_window()
+    # Блокируем Funding Choices, чтобы не подгружалась проверка куков с https://fundingchoicesmessages.google.com
+    driver.execute_cdp_cmd("Network.enable", {})
+    driver.execute_cdp_cmd("Network.setBlockedURLs", {
+        "urls": [
+            "*fundingchoices*"
+        ]
+    })
     driver.get("https://www.globalsqa.com/demo-site/draganddrop/")
     yield driver
     driver.quit()
@@ -19,10 +26,10 @@ class TestDragAndDrop:
     def test_drag_and_drop(self, driver):
         wait = WebDriverWait(driver, 10)
 
-        driver.execute_script("""
-            const consent = document.querySelector('.fc-consent-root');
-            if (consent) consent.remove();
-        """)
+        # driver.execute_script("""
+        #     const consent = document.querySelector('.fc-consent-root');
+        #     if (consent) consent.remove();
+        # """)
 
         wait.until(
             EC.frame_to_be_available_and_switch_to_it(
