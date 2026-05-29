@@ -38,3 +38,5 @@ class TestPurchaseFlow:
         total = checkout_overview_page.get_total()
 
         assert total == "Total: $58.29"
+
+# uv run pytest hw_06/test_06.py -s --tb=short
